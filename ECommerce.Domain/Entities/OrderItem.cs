@@ -18,4 +18,12 @@ public class OrderItem
         UnitPrice = unitPrice;
         Quantity = quantity;
     }
+
+    internal void AdjustQuantity(int newQuantity)
+    {
+        if (newQuantity <= 0)
+            throw new ArgumentException("Quantity must be greater than zero.");
+
+        Quantity = newQuantity;
+    }
 }

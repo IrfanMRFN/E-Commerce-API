@@ -41,6 +41,16 @@ public class Order
         RecalculateTotal();
     }
 
+    public void AdjustItemQuantity(Guid productId, int newQuantity)
+    {
+        var existingItem = _items.FirstOrDefault(i => i.ProductId == productId);
+        if (existingItem == null)
+            throw new KeyNotFoundException($"Product is not in the order.");
+
+        existingItem.AdjustQuantity(newQuantity);
+        RecalculateTotal();
+    }
+
     private void RecalculateTotal()
     {
         TotalAmount = _items.Sum(i => i.UnitPrice * i.Quantity);
