@@ -1,4 +1,5 @@
 @HostAddress = http://localhost:5112
+@Id = paste_the_id_here
 
 ### Create a Valid Product (Expected: 200 OK)
 POST {{HostAddress}}/api/products
@@ -25,16 +26,34 @@ Content-Type: application/json
 GET {{HostAddress}}/api/products
 
 ### Get Product By Id
-GET {{HostAddress}}/api/products/727fff51-480c-4894-bf0b-722949a085ee
+GET {{HostAddress}}/api/products/{{Id}}
 
 ### Update a Product
-PUT {{HostAddress}}/api/products/727fff51-480c-4894-bf0b-722949a085ef
+PUT {{HostAddress}}/api/products/{{Id}}
 Content-Type: application/json
 
 {
-    "id": "727fff51-480c-4894-bf0b-722949a085ef",
+    "id": "{{Id}}",
     "name": "Mechanical Keyboard v2",
     "description": "Updated version with optical switches.",
     "price": 149.99,
     "stockQuantity": 40
+}
+
+### Add Stock to Product
+PATCH {{HostAddress}}/api/products/{{Id}}/add-stock
+Content-Type: application/json
+
+{
+    "id": "{{Id}}",
+    "quantity": 10
+}
+
+### Deduct Stock from Product
+PATCH {{HostAddress}}/api/products/{{Id}}/deduct-stock
+Content-Type: application/json
+
+{
+    "id": "{{Id}}",
+    "quantity": 5
 }

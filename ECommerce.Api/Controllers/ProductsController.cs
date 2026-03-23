@@ -1,4 +1,6 @@
+using ECommerce.Application.Features.Products.Commands.AddStock;
 using ECommerce.Application.Features.Products.Commands.CreateProduct;
+using ECommerce.Application.Features.Products.Commands.DeductStock;
 using ECommerce.Application.Features.Products.Commands.UpdateProduct;
 using ECommerce.Application.Features.Products.Queries.GetAllProducts;
 using ECommerce.Application.Features.Products.Queries.GetProductById;
@@ -43,10 +45,43 @@ public class ProductsController : ControllerBase
     public async Task<IActionResult> UpdateProduct(Guid id, [FromBody] UpdateProductCommand command)
     {
         if (id != command.Id)
-            return BadRequest(new { 
+            return BadRequest(new
+            {
                 title = "Bad Request",
                 status = 400,
-                detail = "The ID in the route does not match the ID in the request body." 
+                detail = "The ID in the route does not match the ID in the request body."
+            });
+
+        await _mediator.Send(command);
+
+        return NoContent();
+    }
+
+    [HttpPatch("{id:guid}/add-stock")]
+    public async Task<IActionResult> AddStock(Guid id, [FromBody] AddStockCommand command)
+    {
+        if (id != command.Id)
+            return BadRequest(new
+            {
+                title = "Bad Request",
+                status = 400,
+                detail = "The ID in the route does not match the ID in the request body."
+            });
+
+        await _mediator.Send(command);
+
+        return NoContent();
+    }
+
+    [HttpPatch("{id:guid}/deduct-stock")]
+    public async Task<IActionResult> DeductStock(Guid id, [FromBody] DeductStockCommand command)
+    {
+        if (id != command.Id)
+            return BadRequest(new
+            {
+                title = "Bad Request",
+                status = 400,
+                detail = "The ID in the route does not match the ID in the request body."
             });
 
         await _mediator.Send(command);
