@@ -1,6 +1,7 @@
 using ECommerce.Application.Features.Products.Commands.AddStock;
 using ECommerce.Application.Features.Products.Commands.CreateProduct;
 using ECommerce.Application.Features.Products.Commands.DeductStock;
+using ECommerce.Application.Features.Products.Commands.DeleteProduct;
 using ECommerce.Application.Features.Products.Commands.UpdateProduct;
 using ECommerce.Application.Features.Products.Queries.GetAllProducts;
 using ECommerce.Application.Features.Products.Queries.GetProductById;
@@ -53,7 +54,6 @@ public class ProductsController : ControllerBase
             });
 
         await _mediator.Send(command);
-
         return NoContent();
     }
 
@@ -69,7 +69,6 @@ public class ProductsController : ControllerBase
             });
 
         await _mediator.Send(command);
-
         return NoContent();
     }
 
@@ -85,7 +84,13 @@ public class ProductsController : ControllerBase
             });
 
         await _mediator.Send(command);
+        return NoContent();
+    }
 
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> DeleteProduct(Guid id)
+    {
+        await _mediator.Send(new DeleteProductCommand(id));
         return NoContent();
     }
 }

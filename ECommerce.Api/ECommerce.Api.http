@@ -57,3 +57,6 @@ Content-Type: application/json
     "id": "{{Id}}",
     "quantity": 5
 }
+
+### Delete a Product
+DELETE {{HostAddress}}/api/products/{{Id}}
