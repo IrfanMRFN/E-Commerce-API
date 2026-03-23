@@ -1,3 +1,4 @@
+using ECommerce.Api.Middleware;
 using ECommerce.Application.Behaviors;
 using ECommerce.Application.Interfaces;
 using ECommerce.Infrastructure.Data;
@@ -7,6 +8,11 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddControllers();
+
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+
 builder.Services.AddMediatR(cfg =>
 {
     cfg.RegisterServicesFromAssembly(typeof(IProductRepository).Assembly);
@@ -30,5 +36,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseExceptionHandler();
+app.MapControllers();
 
 await app.RunAsync();

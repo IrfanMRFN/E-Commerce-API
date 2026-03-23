@@ -1,3 +1,22 @@
-@Host: = http://localhost:5112
+@HostAddress = http://localhost:5112
 
-###
+### Create a Valid Product (Expected: 200 OK)
+POST {{HostAddress}}/api/products
+Content-Type: application/json
+
+{
+    "name": "Mechanical Keyboard",
+    "description": "High-quality mechanical keyboard with tactile switches.",
+    "price": 129.99,
+    "stockQuantity": 50
+}
+
+### Create an Invalid Product (Expected: 400 Bad Request with ProblemDetails)
+POST {{HostAddress}}/api/products
+Content-Type: application/json
+
+{
+    "name": "Wireless Mouse",
+    "price": 34.99,
+    "stockQuantity": 100
+}
