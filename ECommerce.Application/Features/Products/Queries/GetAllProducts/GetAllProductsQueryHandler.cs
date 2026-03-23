@@ -17,12 +17,12 @@ public class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQuery, I
         var products = await _productRepository.GetAllAsync();
 
         return products.Select(p => new ProductDto
-        {
-            Id = p.Id,
-            Name = p.Name,
-            Description = p.Description,
-            Price = p.Price,
-            StockQuantity = p.StockQuantity
-        });
+        (
+            p.Id,
+            p.Name,
+            p.Description,
+            p.Price,
+            p.StockQuantity
+        ));
     }
 }

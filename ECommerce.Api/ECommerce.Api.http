@@ -23,3 +23,6 @@ Content-Type: application/json
 
 ### Get All Products
 GET {{HostAddress}}/api/products
+
+### Get Product By Id
+GET {{HostAddress}}/api/products/727fff51-480c-4894-bf0b-722949a085ee
