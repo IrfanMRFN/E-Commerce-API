@@ -30,6 +30,23 @@ public class Product
 
     // --- Domain behaviors ---
 
+    public void Update(string name, string description, decimal price, int stockQuantity)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentException("Name cannot be empty.");
+
+        if (price <= 0)
+            throw new ArgumentException("Price must be greater than zero.");
+
+        if (stockQuantity < 0)
+            throw new ArgumentException("Stock quantity cannot be negative.");
+
+        Name = name;
+        Description = description;
+        Price = price;
+        StockQuantity = stockQuantity;
+    }
+
     public void DeductStock(int quantity)
     {
         if (quantity <= 0)

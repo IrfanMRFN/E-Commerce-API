@@ -16,9 +16,9 @@ POST {{HostAddress}}/api/products
 Content-Type: application/json
 
 {
-    "name": "",
-    "price": -34.99,
-    "stockQuantity": -100
+    "name": "product",
+    "price": 0,
+    "stockQuantity": 0
 }
 
 ### Get All Products
@@ -26,3 +26,15 @@ GET {{HostAddress}}/api/products
 
 ### Get Product By Id
 GET {{HostAddress}}/api/products/727fff51-480c-4894-bf0b-722949a085ee
+
+### Update a Product
+PUT {{HostAddress}}/api/products/727fff51-480c-4894-bf0b-722949a085ef
+Content-Type: application/json
+
+{
+    "id": "727fff51-480c-4894-bf0b-722949a085ef",
+    "name": "Mechanical Keyboard v2",
+    "description": "Updated version with optical switches.",
+    "price": 149.99,
+    "stockQuantity": 40
+}
