@@ -15,7 +15,7 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
 
     public async Task<Guid> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
-        var product = new Product(request.Name, request.Description, request.Price, request.StockQuantity);
+        var product = new Product(request.Name, request.Description ?? string.Empty, request.Price, request.StockQuantity);
         await _productRepository.AddAsync(product);
         return product.Id;
     }

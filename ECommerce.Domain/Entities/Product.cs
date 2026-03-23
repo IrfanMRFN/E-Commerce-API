@@ -15,11 +15,11 @@ public class Product
         if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentException("Product name cannot be empty.");
         
-        if (price < 0)
-            throw new ArgumentException("Price cannot be negative.");
+        if (price <= 0)
+            throw new ArgumentException("Price must be greater than zero.");
 
         if (stockQuantity < 0)
-            throw new ArgumentException("Stock cannot be negative.");
+            throw new ArgumentException("Stock quantity cannot be negative.");
 
         Id = Guid.NewGuid();
         Name = name;
@@ -33,7 +33,7 @@ public class Product
     public void Update(string name, string description, decimal price, int stockQuantity)
     {
         if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentException("Name cannot be empty.");
+            throw new ArgumentException("Product name cannot be empty.");
 
         if (price <= 0)
             throw new ArgumentException("Price must be greater than zero.");
