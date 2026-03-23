@@ -10,6 +10,8 @@
     <Folder Include="Features\Products\" />
     <Folder Include="Features\Products\Commands\" />
     <Folder Include="Features\Products\Commands\CreateProduct\" />
+    <Folder Include="Features\Products\Queries\" />
+    <Folder Include="Features\Products\Queries\GetAllProducts\" />
     <Folder Include="Interfaces\" />
   </ItemGroup>
 

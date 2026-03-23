@@ -1,4 +1,5 @@
 using ECommerce.Application.Features.Products.Commands.CreateProduct;
+using ECommerce.Application.Features.Products.Queries.GetAllProducts;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,5 +21,12 @@ public class ProductsController : ControllerBase
     {
         var productId = await _mediator.Send(command);
         return Ok(new { id = productId });
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAllProducts()
+    {
+        var products = await _mediator.Send(new GetAllProductsQuery());
+        return Ok(products);
     }
 }

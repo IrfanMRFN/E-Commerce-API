@@ -16,7 +16,10 @@ POST {{HostAddress}}/api/products
 Content-Type: application/json
 
 {
-    "name": "Wireless Mouse",
-    "price": 34.99,
-    "stockQuantity": 100
+    "name": "",
+    "price": -34.99,
+    "stockQuantity": -100
 }
+
+### Get All Products
+GET {{HostAddress}}/api/products

@@ -39,6 +39,20 @@ public class GlobalExceptionHandler : IExceptionHandler
             return true; // Indicates the exception was handled
         }
 
+        if (exception is KeyNotFoundException)
+        {
+            var notFoundProblemDetails = new ProblemDetails
+            {
+                Status = StatusCodes.Status404NotFound,
+                Title = "Not Found",
+                Detail = exception.Message
+            };
+
+            httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+            await httpContext.Response.WriteAsJsonAsync(notFoundProblemDetails, cancellationToken);
+            return true;
+        }
+
         if (exception is ArgumentException || exception is InvalidOperationException)
         {
             var badRequestProblemDetails = new ProblemDetails
