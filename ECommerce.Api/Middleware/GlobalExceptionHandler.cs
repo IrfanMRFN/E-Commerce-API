@@ -13,60 +13,63 @@ public class GlobalExceptionHandler : IExceptionHandler
         _logger = logger;
     }
 
-    public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
+    public async ValueTask<bool> TryHandleAsync(
+        HttpContext httpContext,
+        Exception exception,
+        CancellationToken cancellationToken)
     {
-        _logger.LogError(exception, "An exception occured: {Message}", exception.Message);
+        _logger.LogError(exception, "Exception occurred: {Message}", exception.Message);
 
-        if (exception is ValidationException validationException)
+        var problemDetails = new ProblemDetails
         {
-            var validationProblemDetails = new ProblemDetails
-            {
-                Status = StatusCodes.Status400BadRequest,
-                Type = "ValidationFailure",
-                Title = "Validation error",
-                Detail = "One or more validation errors occured."
-            };
+            Instance = httpContext.Request.Path
+        };
 
-            if (validationException.Errors is not null)
-            {
-                validationProblemDetails.Extensions["errors"] = validationException.Errors
+        switch (exception)
+        {
+            case UnauthorizedAccessException unauthorizedAccessException:
+                problemDetails.Status = StatusCodes.Status401Unauthorized;
+                problemDetails.Title = "Unauthorized";
+                problemDetails.Detail = unauthorizedAccessException.Message;
+                break;
+
+            case InvalidOperationException invalidOperationException:
+                problemDetails.Status = StatusCodes.Status409Conflict;
+                problemDetails.Title = "Conflict";
+                problemDetails.Detail = invalidOperationException.Message;
+                break;
+
+            case ValidationException validationException:
+                problemDetails.Status = StatusCodes.Status400BadRequest;
+                problemDetails.Title = "Validation Error";
+                problemDetails.Detail = "One or more validation errors occurred.";
+                problemDetails.Extensions["errors"] = validationException.Errors
                     .GroupBy(e => e.PropertyName, e => e.ErrorMessage)
                     .ToDictionary(failureGroup => failureGroup.Key, failureGroup => failureGroup.ToArray());
-            }
+                break;
 
-            httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
-            await httpContext.Response.WriteAsJsonAsync(validationProblemDetails, cancellationToken);
-            return true; // Indicates the exception was handled
+            case KeyNotFoundException keyNotFoundException:
+                problemDetails.Status = StatusCodes.Status404NotFound;
+                problemDetails.Title = "Resource Not Found";
+                problemDetails.Detail = keyNotFoundException.Message;
+                break;
+
+            case ArgumentException argumentException:
+                problemDetails.Status = StatusCodes.Status400BadRequest;
+                problemDetails.Title = "Bad Request";
+                problemDetails.Detail = argumentException.Message;
+                break;
+
+            default:
+                problemDetails.Status = StatusCodes.Status500InternalServerError;
+                problemDetails.Title = "Internal Server Error";
+                problemDetails.Detail = "An unexpected error occurred.";
+                break;
         }
 
-        if (exception is KeyNotFoundException)
-        {
-            var notFoundProblemDetails = new ProblemDetails
-            {
-                Status = StatusCodes.Status404NotFound,
-                Title = "Not Found",
-                Detail = exception.Message
-            };
+        httpContext.Response.StatusCode = problemDetails.Status.Value;
+        await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
 
-            httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
-            await httpContext.Response.WriteAsJsonAsync(notFoundProblemDetails, cancellationToken);
-            return true;
-        }
-
-        if (exception is ArgumentException || exception is InvalidOperationException)
-        {
-            var badRequestProblemDetails = new ProblemDetails
-            {
-                Status = StatusCodes.Status400BadRequest,
-                Title = "Bad Request",
-                Detail = exception.Message
-            };
-
-            httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
-            await httpContext.Response.WriteAsJsonAsync(badRequestProblemDetails, cancellationToken);
-            return true;
-        }
-
-        return false; // Let default behavior handle 500 Internal Server Errors
+        return true;
     }
 }

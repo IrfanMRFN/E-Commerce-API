@@ -6,6 +6,11 @@
 
   <ItemGroup>
     <Folder Include="Behaviors\" />
+    <Folder Include="Features\Customers\" />
+    <Folder Include="Features\Customers\Commands\" />
+    <Folder Include="Features\Customers\Commands\CreateCustomer\" />
+    <Folder Include="Features\Customers\Queries\" />
+    <Folder Include="Features\Customers\Queries\LoginCustomer\" />
     <Folder Include="Features\Products\Commands\AddStock\" />
     <Folder Include="Features\Products\Commands\CreateProduct\" />
     <Folder Include="Features\Products\Commands\DeleteProduct\" />

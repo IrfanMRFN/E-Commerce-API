@@ -1,6 +1,7 @@
 using ECommerce.Api.Middleware;
 using ECommerce.Application.Behaviors;
 using ECommerce.Application.Interfaces;
+using ECommerce.Infrastructure.Authentication;
 using ECommerce.Infrastructure.Data;
 using ECommerce.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +27,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // Register Repositories
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddSingleton<IPasswordHasher, PasswordHasher>();
 
 var app = builder.Build();
 

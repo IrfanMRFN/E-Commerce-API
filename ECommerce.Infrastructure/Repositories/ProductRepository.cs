@@ -34,6 +34,7 @@ public class ProductRepository : IProductRepository
     {
         _context.Products.Update(product);
         await _context.SaveChangesAsync();
+        await Task.CompletedTask; // Or change the interface method to be synchronous
     }
 
     public async Task DeleteAsync(Guid id)

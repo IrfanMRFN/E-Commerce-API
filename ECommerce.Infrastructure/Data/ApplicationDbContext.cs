@@ -17,44 +17,76 @@ public class ApplicationDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         // Configure Product
-        modelBuilder.Entity<Product>()
-            .Property(p => p.Price)
-            .HasPrecision(18, 2);
+        modelBuilder.Entity<Product>(entity =>
+        {
+            entity.HasIndex(p => p.Id)
+                .IsUnique();
 
-        modelBuilder.Entity<Product>()
-            .Property(p => p.Name).HasMaxLength(100);
+            entity.Property(p => p.Name)
+                .HasMaxLength(100)
+                .IsRequired();
 
-        modelBuilder.Entity<Product>()
-            .Property(P => P.Description).HasMaxLength(500);
+            entity.Property(p => p.Description)
+                .HasMaxLength(500);
+
+            entity.Property(p => p.Price)
+                .HasPrecision(18, 2);
+        });
 
         // Configure Customer
-        modelBuilder.Entity<Customer>()
-            .Property(c => c.FirstName).HasMaxLength(50);
+        modelBuilder.Entity<Customer>(entity =>
+        {
+            entity.HasIndex(c => c.Email)
+                .IsUnique();
 
-        modelBuilder.Entity<Customer>()
-            .Property(c => c.LastName).HasMaxLength(50);
+            entity.Property(c => c.FirstName)
+                .HasMaxLength(50)
+                .IsRequired();
 
-        modelBuilder.Entity<Customer>()
-            .Property(c => c.Email).HasMaxLength(100);
+            entity.Property(c => c.LastName)
+                .HasMaxLength(50);
+
+            entity.Property(c => c.Email)
+                .HasMaxLength(100)
+                .IsRequired();
+
+            entity.Property(c => c.PasswordHash)
+                .HasMaxLength(50)
+                .IsRequired();
+
+            entity.Property(c => c.Role)
+                .HasMaxLength(20)
+                .HasDefaultValue("User")
+                .IsRequired();
+        });
 
         // Configure Order
-        modelBuilder.Entity<Order>()
-            .Property(o => o.TotalAmount)
-            .HasPrecision(18, 2);
+        modelBuilder.Entity<Order>(entity =>
+        {
+            entity.HasIndex(o => o.Id)
+                .IsUnique();
 
-        modelBuilder.Entity<Order>()
-            .Property(o => o.Status).HasMaxLength(20);
+            entity.Property(o => o.TotalAmount)
+                .HasPrecision(18, 2);
 
-        modelBuilder.Entity<Order>()
-            .Metadata.FindNavigation(nameof(Order.Items))?
-            .SetPropertyAccessMode(PropertyAccessMode.Field);
+            entity.Property(o => o.Status)
+                .HasMaxLength(20);
+
+            entity.Metadata.FindNavigation(nameof(Order.Items))?
+                .SetPropertyAccessMode(PropertyAccessMode.Field);
+        });
 
         // Configure OrderItem
-        modelBuilder.Entity<OrderItem>()
-            .Property(oi => oi.UnitPrice)
-            .HasPrecision(18, 2);
+        modelBuilder.Entity<OrderItem>(entity =>
+        {
+            entity.HasIndex(oi => oi.Id)
+                .IsUnique();
 
-        modelBuilder.Entity<OrderItem>()
-            .Property(oi => oi.ProductName).HasMaxLength(100);
+            entity.Property(oi => oi.ProductName)
+                .HasMaxLength(100);
+            
+            entity.Property(oi => oi.UnitPrice)
+                .HasPrecision(18, 2);
+        });
     }
 }

@@ -13,7 +13,7 @@ public class Product
     public Product(string name, string description, decimal price, int stockQuantity)
     {
         if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentException("Product name cannot be empty.");
+            throw new ArgumentException("Product name is required.");
         
         if (price <= 0)
             throw new ArgumentException("Price must be greater than zero.");
@@ -33,7 +33,7 @@ public class Product
     public void Update(string name, string description, decimal price, int stockQuantity)
     {
         if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentException("Product name cannot be empty.");
+            throw new ArgumentException("Product name is required.");
 
         if (price <= 0)
             throw new ArgumentException("Price must be greater than zero.");
